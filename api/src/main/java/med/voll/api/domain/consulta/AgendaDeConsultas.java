@@ -1,7 +1,8 @@
 package med.voll.api.domain.consulta;
 
 import med.voll.api.domain.ValidacaoException;
-import med.voll.api.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
+import med.voll.api.domain.consulta.validacoes.agendamento.ValidadorAgendamentoDeConsulta;
+import med.voll.api.domain.consulta.validacoes.cancelamento.ValidadorCancelamentoDeConsulta;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
@@ -24,6 +25,8 @@ public class AgendaDeConsultas {
     //Uma forma de injetar todos os validadores numa list injetar a interface
     @Autowired
     private List<ValidadorAgendamentoDeConsulta> validadores;
+
+    private List<ValidadorCancelamentoDeConsulta> validadoresCancelamento;
 
     //Essa é uma classe Service executa as regras de negócio e validações da aplicação
     public DadosDetalhamentoConsulta Agendar(DadosAgendamentoConsulta dados) {
@@ -67,5 +70,13 @@ public class AgendaDeConsultas {
 
         return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
 
+    }
+
+    public void cancelar(DadosCancelamentoConsulta dados){
+        if(!consultaRepository.existsById(dados.idConsulta())){
+            throw new ValidacaoException("Id da consulta informada não existe!");
+        }
+
+        validadoresCancelamento.forEach(v-> v.validar(dados));
     }
 }
