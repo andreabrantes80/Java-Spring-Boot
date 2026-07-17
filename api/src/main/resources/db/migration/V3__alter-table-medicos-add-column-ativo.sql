@@ -1,2 +1,5 @@
-alter table medicos add ativo TINYINT;
-update medicos set ativo = 1;
+ALTER TABLE medicos
+ADD COLUMN ativo BOOLEAN;
+
+UPDATE medicos
+SET ativo = TRUE;

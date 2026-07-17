@@ -1,3 +1,8 @@
-alter table pacientes add column ativo tinyint;
-update pacientes set ativo = 1;
-alter table pacientes modify ativo tinyint not null;
+ALTER TABLE pacientes
+ADD COLUMN ativo BOOLEAN;
+
+UPDATE pacientes
+SET ativo = TRUE;
+
+ALTER TABLE pacientes
+ALTER COLUMN ativo SET NOT NULL;
