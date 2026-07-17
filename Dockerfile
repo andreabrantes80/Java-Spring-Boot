@@ -9,4 +9,6 @@ RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","target/api-0.0.1-SNAPSHOT.jar"]
+ENV PORT=8080
+
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=$PORT -jar target/api-0.0.1-SNAPSHOT.jar"]
