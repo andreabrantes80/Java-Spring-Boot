@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("consultas")
 @SecurityRequirement(name = "bearer-key")
@@ -52,5 +55,15 @@ public class ConsultaController {
         var consulta = consultaRepository.getReferenceById(id);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));
+    }
+
+    @GetMapping("/disponibilidade")
+    public ResponseEntity<List<DadosDisponibilidadeConsulta>> disponibilidade(
+            @RequestParam LocalDate data){
+
+        return ResponseEntity.ok(
+                agenda.disponibilidade(data)
+        );
+
     }
 }

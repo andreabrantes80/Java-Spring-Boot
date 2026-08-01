@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
@@ -12,4 +13,9 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     boolean existsByMedicoIdAndData(Long idMedico, LocalDateTime data);
 
     Page<Consulta> findByCanceladaFalse(Pageable pageable);
+
+    List<Consulta> findAllByDataBetween(
+            LocalDateTime inicio,
+            LocalDateTime fim
+    );
 }

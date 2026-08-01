@@ -9,6 +9,9 @@ import med.voll.api.domain.paciente.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,6 +86,37 @@ public class AgendaDeConsultas {
         var consulta = consultaRepository.getReferenceById(dados.idConsulta());
 
         consulta.cancelar(dados.motivo());
+
+    }
+
+    public List<DadosDisponibilidadeConsulta> disponibilidade(LocalDate data) {
+
+        var inicio = data.atTime(7,0);
+
+        var fim = data.atTime(18,0);
+
+        var consultas = consultaRepository.findAllByDataBetween(inicio,fim);
+
+        List<DadosDisponibilidadeConsulta> retorno = new ArrayList<>();
+
+        for(int hora = 7; hora <=18; hora++){
+
+            LocalTime horario = LocalTime.of(hora,0);
+
+            boolean ocupado = consultas.stream()
+
+                    .anyMatch(c ->
+                            c.getData().toLocalTime().equals(horario));
+
+            retorno.add(
+                    new DadosDisponibilidadeConsulta(
+                            horario,
+                            !ocupado
+                    )
+            );
+        }
+
+        return retorno;
 
     }
 }
