@@ -25,7 +25,7 @@ public class AgendaDeConsultas {
     //Uma forma de injetar todos os validadores numa list injetar a interface
     @Autowired
     private List<ValidadorAgendamentoDeConsulta> validadores;
-
+    @Autowired
     private List<ValidadorCancelamentoDeConsulta> validadoresCancelamento;
 
     //Essa é uma classe Service executa as regras de negócio e validações da aplicação
