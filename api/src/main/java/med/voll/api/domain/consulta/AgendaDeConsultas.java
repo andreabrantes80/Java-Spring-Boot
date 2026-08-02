@@ -6,6 +6,7 @@ import med.voll.api.domain.consulta.validacoes.cancelamento.ValidadorCancelament
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
+import med.voll.api.infra.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class AgendaDeConsultas {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private EmailService emailService;
+
 
     //Uma forma de injetar todos os validadores numa list injetar a interface
     @Autowired
@@ -57,6 +62,14 @@ public class AgendaDeConsultas {
 
         consultaRepository.save(consulta);
 
+        // Dispara e-mail de confirmação
+        emailService.enviarEmail(
+                paciente.getEmail(),
+                "Consulta Agendada",
+                "Sua consulta com o Dr(a). " + medico.getNome() +
+                        " foi agendada para " + dados.data() + "."
+        );
+
         return new DadosDetalhamentoConsulta(consulta);
 
 
@@ -86,6 +99,15 @@ public class AgendaDeConsultas {
         var consulta = consultaRepository.getReferenceById(dados.idConsulta());
 
         consulta.cancelar(dados.motivo());
+
+        // Dispara e-mail de cancelamento
+        emailService.enviarEmail(
+                consulta.getPaciente().getEmail(),
+                "Consulta Cancelada",
+                "Sua consulta com o Dr(a). " + consulta.getMedico().getNome() +
+                        " em " + consulta.getData() +
+                        " foi cancelada. Motivo: " + dados.motivo()
+        );
 
     }
 
