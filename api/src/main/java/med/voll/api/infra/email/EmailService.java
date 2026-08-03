@@ -2,6 +2,7 @@ package med.voll.api.infra.email;
 
 import com.sendgrid.Method;
 import com.sendgrid.Request;
+import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
@@ -31,6 +32,14 @@ public class EmailService {
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
             sg.api(request);
+
+            // chamada ao SendGrid
+            Response response = sg.api(request);
+
+            // logs para verificar status
+            System.out.println("Status: " + response.getStatusCode());
+            System.out.println("Body: " + response.getBody());
+            System.out.println("Headers: " + response.getHeaders());
         } catch (IOException ex) {
             throw new RuntimeException("Erro ao enviar e-mail", ex);
         }
