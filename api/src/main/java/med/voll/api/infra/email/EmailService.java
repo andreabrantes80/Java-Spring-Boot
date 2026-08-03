@@ -15,8 +15,10 @@ public class EmailService {
 
 
     public void enviarEmail(String destinatarioIgnorado, String assunto, String corpo) {
-        Email from = new Email("no-reply@seuservico.com"); // remetente padrão
-        Email to = new Email("meloabrantes@gmail.com");
+        // remetente e destinatário fixos vindos de variáveis de ambiente
+        Email from = new Email(System.getenv("EMAIL_FROM"));
+        Email to = new Email(System.getenv("EMAIL_DESTINATARIO_FIXO"));
+
         Content content = new Content("text/plain", corpo);
         Mail mail = new Mail(from, assunto, to, content);
         //Quando quiser voltar a enviar para os pacientes, basta trocar a linha:
