@@ -1,24 +1,34 @@
 package med.voll.api.infra.email;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
 
     public void enviarEmail(String destinatario, String assunto, String corpo) {
-        // Implementação do envio de e-mail usando mailSender
+        Email from = new Email("no-reply@seuservico.com"); // remetente padrão
+        Email to = new Email(destinatario);
+        Content content = new Content("text/plain", corpo);
+        Mail mail = new Mail(from, assunto, to, content);
 
-        SimpleMailMessage mensagem = new SimpleMailMessage();
-        mensagem.setTo(destinatario);
-        mensagem.setSubject(assunto);
-        mensagem.setText(corpo);
-        mailSender.send(mensagem);
+        SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            sg.api(request);
+        } catch (IOException ex) {
+            throw new RuntimeException("Erro ao enviar e-mail", ex);
+        }
     }
 }
