@@ -14,11 +14,13 @@ import java.io.IOException;
 public class EmailService {
 
 
-    public void enviarEmail(String destinatario, String assunto, String corpo) {
+    public void enviarEmail(String destinatarioIgnorado, String assunto, String corpo) {
         Email from = new Email("no-reply@seuservico.com"); // remetente padrão
-        Email to = new Email(destinatario);
+        Email to = new Email("meloabrantes@gmail.com");
         Content content = new Content("text/plain", corpo);
         Mail mail = new Mail(from, assunto, to, content);
+        //Quando quiser voltar a enviar para os pacientes, basta trocar a linha:
+        //Email to = new Email(destinatario);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
         Request request = new Request();
