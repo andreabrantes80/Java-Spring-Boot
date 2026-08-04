@@ -6,6 +6,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.domain.endereco.Endereco;
+import med.voll.api.domain.prontuario.Prontuario;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @EqualsAndHashCode(of = "id")
@@ -25,6 +29,10 @@ public class Paciente {
 
     @Embedded
     private Endereco endereco;
+
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
+    private List<Prontuario> prontuarios = new ArrayList<>();
+
 
     public Paciente(DadosCadastroPaciente dados) {
         this.ativo = true;
