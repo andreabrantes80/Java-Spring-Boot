@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,18 +44,18 @@ public class AgendaDeConsultas {
             throw new ValidacaoException("Id do paciente informado nãO existe.");
 
         }
-        
-        if(dados.idMedico()!= null && !medicoRepository.existsById(dados.idMedico())){
+
+        if (dados.idMedico() != null && !medicoRepository.existsById(dados.idMedico())) {
             throw new ValidacaoException("Id do médico informado nãO existe.");
         }
         //aqui fazemos um foreach para passar em todos os validadores injetados
-        validadores.forEach(v-> v.validar(dados));
+        validadores.forEach(v -> v.validar(dados));
 
 
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
 
         var medico = escolherMedico(dados);
-        if(medico == null){
+        if (medico == null) {
             throw new ValidacaoException("Não existe médico disponível nessa data!");
         }
 
@@ -62,12 +63,24 @@ public class AgendaDeConsultas {
 
         consultaRepository.save(consulta);
 
+
+        //Formatador no padrão brasil
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dataHoraFormatada = dados.data().format(formatter);
+
+        String corpoHtml =
+                "<html><body style='font-family: Arial, sans-serif;'>" +
+                        "<h2 style='color:#2E86C1;'>Consulta Agendada</h2>" +
+                        "<p>Olá <strong>" + paciente.getNome() + "</strong>,</p>" +
+                        "<p>Sua consulta com o Dr(a). <strong>" + medico.getNome() + "</strong> foi confirmada.</p>" +
+                        "<p><strong>Data:</strong> " + dados.data().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "</p>" +
+                        "</body></html>";
+
         // Dispara e-mail de confirmação
         emailService.enviarEmail(
                 paciente.getEmail(),
                 "Consulta Agendada",
-                "Sua consulta com o Dr(a). " + medico.getNome() +
-                        " foi agendada para " + dados.data() + "."
+                corpoHtml
         );
 
         return new DadosDetalhamentoConsulta(consulta);
@@ -76,11 +89,11 @@ public class AgendaDeConsultas {
     }
 
     private Medico escolherMedico(DadosAgendamentoConsulta dados) {
-        if(dados.idMedico() != null){
+        if (dados.idMedico() != null) {
             return medicoRepository.getReferenceById(dados.idMedico());
         }
 
-        if(dados.especialidade() == null){
+        if (dados.especialidade() == null) {
             throw new ValidacaoException("Especialidade é obrigatória quando médico não for escolhido!");
         }
 
@@ -88,9 +101,9 @@ public class AgendaDeConsultas {
 
     }
 
-    public void cancelar(DadosCancelamentoConsulta dados){
+    public void cancelar(DadosCancelamentoConsulta dados) {
 
-        if(!consultaRepository.existsById(dados.idConsulta())){
+        if (!consultaRepository.existsById(dados.idConsulta())) {
             throw new ValidacaoException("Id da consulta informada não existe!");
         }
 
@@ -100,30 +113,44 @@ public class AgendaDeConsultas {
 
         consulta.cancelar(dados.motivo());
 
+
+        //Formatador no padrão brasil
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dataHoraFormatada = consulta.getData().format(formatter);
+
+        String corpoHtml =
+                "<html><body style='font-family: Arial, sans-serif;'>" +
+                        "<h2 style='color:#C0392B;'>Consulta Cancelada</h2>" +
+                        "<p>Olá <strong>" + consulta.getPaciente().getNome() + "</strong>,</p>" +
+                        "<p>Sua consulta com o Dr(a). <strong>" + consulta.getMedico().getNome() + "</strong> " +
+                        "marcada para <strong>" + dataHoraFormatada + "</strong> foi cancelada.</p>" +
+                        "<p><strong>Motivo:</strong> " + dados.motivo() + "</p>" +
+                        "<hr>" +
+                        "<p style='font-size:12px; color:#888;'>Clinica VillMed - Brasília</p>" +
+                        "</body></html>";
+
         // Dispara e-mail de cancelamento
         emailService.enviarEmail(
                 consulta.getPaciente().getEmail(),
                 "Consulta Cancelada",
-                "Sua consulta com o Dr(a). " + consulta.getMedico().getNome() +
-                        " em " + consulta.getData() +
-                        " foi cancelada. Motivo: " + dados.motivo()
+                corpoHtml
         );
 
     }
 
     public List<DadosDisponibilidadeConsulta> disponibilidade(LocalDate data) {
 
-        var inicio = data.atTime(7,0);
+        var inicio = data.atTime(7, 0);
 
-        var fim = data.atTime(18,0);
+        var fim = data.atTime(18, 0);
 
-        var consultas = consultaRepository.findAllByDataBetween(inicio,fim);
+        var consultas = consultaRepository.findAllByDataBetween(inicio, fim);
 
         List<DadosDisponibilidadeConsulta> retorno = new ArrayList<>();
 
-        for(int hora = 7; hora <=18; hora++){
+        for (int hora = 7; hora <= 18; hora++) {
 
-            LocalTime horario = LocalTime.of(hora,0);
+            LocalTime horario = LocalTime.of(hora, 0);
 
             boolean ocupado = consultas.stream()
 
