@@ -20,7 +20,7 @@ public class EmailService {
         Email from = new Email(System.getenv("EMAIL_FROM"));
         Email to = new Email(System.getenv("EMAIL_DESTINATARIO_FIXO"));
 
-        Content content = new Content("text/plain", corpo);
+        Content content = new Content("text/html", corpo);
         Mail mail = new Mail(from, assunto, to, content);
         //Quando quiser voltar a enviar para os pacientes, basta trocar a linha:
         //Email to = new Email(destinatario);
