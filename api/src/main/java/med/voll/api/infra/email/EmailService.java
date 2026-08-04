@@ -33,13 +33,6 @@ public class EmailService {
             request.setBody(mail.build());
             sg.api(request);
 
-            // chamada ao SendGrid
-            Response response = sg.api(request);
-
-            // logs para verificar status
-            System.out.println("Status: " + response.getStatusCode());
-            System.out.println("Body: " + response.getBody());
-            System.out.println("Headers: " + response.getHeaders());
         } catch (IOException ex) {
             throw new RuntimeException("Erro ao enviar e-mail", ex);
         }
