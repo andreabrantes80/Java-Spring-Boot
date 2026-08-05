@@ -1,6 +1,7 @@
 package med.voll.api.controller;
 
 
+import med.voll.api.domain.prontuario.DadosCadastroProntuario;
 import med.voll.api.domain.prontuario.Prontuario;
 import med.voll.api.infra.prontuario.ProntuarioService;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,8 @@ public class ProntuarioController {
     }
 
     @PostMapping
-    public Prontuario cadastrar(@RequestParam Long pacienteId,
-                                @RequestParam(required = false) Long consultaId,
-                                @RequestParam String anotacoes) {
-        return prontuarioService.cadastrar(pacienteId, consultaId, anotacoes);
+    public Prontuario cadastrar(@RequestBody DadosCadastroProntuario dados) {
+        return prontuarioService.cadastrar(dados.pacienteId(), dados.consultaId(), dados.anotacoes());
     }
 
     @GetMapping("/paciente/{id}")
