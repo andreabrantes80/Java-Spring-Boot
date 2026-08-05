@@ -42,6 +42,6 @@ public class ProntuarioService {
     }
 
     public List<Prontuario> listarPorPaciente(Long pacienteId) {
-        return prontuarioRepository.findByPacienteId(pacienteId);
+        return prontuarioRepository.findByPaciente_Id(pacienteId);
     }
 }
