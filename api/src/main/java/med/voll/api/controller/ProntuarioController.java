@@ -2,6 +2,7 @@ package med.voll.api.controller;
 
 
 import med.voll.api.domain.prontuario.DadosCadastroProntuario;
+import med.voll.api.domain.prontuario.DadosDetalhamentoProntuario;
 import med.voll.api.domain.prontuario.Prontuario;
 import med.voll.api.infra.prontuario.ProntuarioService;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,20 @@ public class ProntuarioController {
     }
 
     @PostMapping
-    public Prontuario cadastrar(@RequestBody DadosCadastroProntuario dados) {
-        return prontuarioService.cadastrar(dados.pacienteId(), dados.consultaId(), dados.anotacoes());
+    public DadosDetalhamentoProntuario cadastrar(@RequestBody DadosCadastroProntuario dados) {
+        var prontuario = prontuarioService.cadastrar(
+                dados.pacienteId(),
+                dados.consultaId(),
+                dados.anotacoes()
+        );
+        return new DadosDetalhamentoProntuario(prontuario);
     }
 
     @GetMapping("/paciente/{id}")
-    public List<Prontuario> listarPorPaciente(@PathVariable Long id) {
-        return prontuarioService.listarPorPaciente(id);
+    public List<DadosDetalhamentoProntuario> listarPorPaciente(@PathVariable Long id) {
+        return prontuarioService.listarPorPaciente(id)
+                .stream()
+                .map(DadosDetalhamentoProntuario::new)
+                .toList();
     }
 }
