@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
+import med.voll.api.domain.prontuario.DadosAtualizacaoProntuario;
 import med.voll.api.domain.prontuario.Prontuario;
 import med.voll.api.domain.prontuario.ProntuarioRepository;
 import org.springframework.stereotype.Service;
@@ -44,4 +45,23 @@ public class ProntuarioService {
     public List<Prontuario> listarPorPaciente(Long pacienteId) {
         return prontuarioRepository.findByPaciente_Id(pacienteId);
     }
+
+    @Transactional
+    public Prontuario atualizar(Long id, DadosAtualizacaoProntuario dados) {
+        var prontuario = prontuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+
+        if (dados.consultaId() != null) {
+            var consulta = consultaRepository.findById(dados.consultaId())
+                    .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+            prontuario.setConsulta(consulta);
+        }
+
+        if (dados.anotacoes() != null && !dados.anotacoes().isBlank()) {
+            prontuario.setAnotacoes(dados.anotacoes());
+        }
+
+        return prontuarioRepository.save(prontuario);
+    }
+
 }

@@ -2,10 +2,7 @@ package med.voll.api.domain.prontuario;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.paciente.Paciente;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity(name = "Prontuario")
 @Table(name = "prontuarios")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
