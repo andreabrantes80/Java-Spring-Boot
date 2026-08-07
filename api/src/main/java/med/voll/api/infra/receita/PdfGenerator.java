@@ -13,7 +13,9 @@ public class PdfGenerator {
         try {
             Document document = new Document();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PdfWriter.getInstance(document, out);
+            PdfWriter writer =  PdfWriter.getInstance(document, out);
+            // adiciona o evento de rodapé
+            writer.setPageEvent(new FooterEvent(nomeClinica + " - " + enderecoClinica + " | Tel: " + telefoneClinica));
             document.open();
 
             // Logo da clínica
@@ -48,9 +50,9 @@ public class PdfGenerator {
             document.add(new Paragraph("Assinatura\n\n"));
 
             // Rodapé
-            Paragraph footer = new Paragraph(nomeClinica + " - " + enderecoClinica + " | Tel: " + telefoneClinica);
-            footer.setAlignment(Element.ALIGN_CENTER);
-            document.add(footer);
+//            Paragraph footer = new Paragraph(nomeClinica + " - " + enderecoClinica + " | Tel: " + telefoneClinica);
+//            footer.setAlignment(Element.ALIGN_CENTER);
+//            document.add(footer);
 
             document.close();
             return out.toByteArray();
