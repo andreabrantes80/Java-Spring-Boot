@@ -34,12 +34,19 @@ public class ReceitaController {
 
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> imprimir(@PathVariable Long id) {
-        var receita = receitaService.buscarPorId(id); // exemplo simples
-        String conteudo = "Receita Médica\n\nMedicamento: " + receita.getMedicamento() +
-                "\nDosagem: " + receita.getDosagem() +
-                "\nInstruções: " + receita.getInstrucoes();
+        var receita = receitaService.buscarPorId(id);
+        // Exemplo de dados adicionais
+        String nomePaciente = receita.getProntuario().getPaciente().getNome();
+        String emailPaciente = receita.getProntuario().getPaciente().getEmail();
+        String telefonePaciente = receita.getProntuario().getPaciente().getTelefone();
 
-        byte[] pdf = PdfGenerator.gerar(conteudo);
+        String nomeMedico = receita.getProntuario().getConsulta().getMedico().getNome();
+        String nomeClinica = "Clínica VollMed";
+        String enderecoClinica = "Av. Principal, 123 - Brasília/DF";
+        String telefoneClinica = "(61) 99999-9999";
+        String logoPath = "src/main/resources/static/logo.png"; // caminho da logo
+
+        byte[] pdf = PdfGenerator.gerar(receita, nomePaciente, emailPaciente, telefonePaciente, nomeMedico, nomeClinica, enderecoClinica, telefoneClinica, logoPath);
 
         return ResponseEntity.ok()
                 .header("Content-Type", "application/pdf")
