@@ -34,7 +34,7 @@ public class ReceitaController {
 
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> imprimir(@PathVariable Long id) {
-        var receita = receitaService.listarPorProntuario(id).get(0); // exemplo simples
+        var receita = receitaService.buscarPorId(id); // exemplo simples
         String conteudo = "Receita Médica\n\nMedicamento: " + receita.getMedicamento() +
                 "\nDosagem: " + receita.getDosagem() +
                 "\nInstruções: " + receita.getInstrucoes();

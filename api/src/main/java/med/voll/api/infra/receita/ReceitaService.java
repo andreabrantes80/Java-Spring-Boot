@@ -32,4 +32,10 @@ public class ReceitaService {
         return receitaRepository.findByProntuario_Id(prontuarioId);
     }
 
+    public Receita buscarPorId(Long id) {
+        return receitaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
+    }
+
+
 }
