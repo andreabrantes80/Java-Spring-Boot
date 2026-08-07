@@ -22,7 +22,7 @@ public class Receita {
     private String instrucoes;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "consulta_id", nullable = false)
+    @JoinColumn(name = "prontuario_id", nullable = false)
     private med.voll.api.domain.prontuario.Prontuario prontuario;
 
 }
