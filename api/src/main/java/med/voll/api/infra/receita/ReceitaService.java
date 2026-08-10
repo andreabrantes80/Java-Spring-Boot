@@ -37,5 +37,18 @@ public class ReceitaService {
                 .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
     }
 
+    @Transactional
+    public Receita atualizar(Long id, DadosCadastroReceita dados) {
+        var receita = receitaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
+
+        receita.setMedicamento(dados.medicamento());
+        receita.setDosagem(dados.dosagem());
+        receita.setInstrucoes(dados.instrucoes());
+
+        return receitaRepository.save(receita);
+    }
+
+
 
 }

@@ -60,4 +60,11 @@ public class ReceitaController {
                 .header("Content-Disposition", "inline; filename=receita.pdf")
                 .body(pdf);
     }
+
+    @PutMapping("/{id}")
+    public DadosDetalhamentoReceita atualizar(@PathVariable Long id,
+                                              @RequestBody DadosCadastroReceita dados) {
+        var receita = receitaService.atualizar(id, dados);
+        return new DadosDetalhamentoReceita(receita);
+    }
 }
