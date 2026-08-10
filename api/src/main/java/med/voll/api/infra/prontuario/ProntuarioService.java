@@ -42,6 +42,11 @@ public class ProntuarioService {
         return prontuarioRepository.save(prontuario);
     }
 
+    public List<Prontuario> listar() {
+        return prontuarioRepository.findAll();
+    }
+
+
     public List<Prontuario> listarPorPaciente(Long pacienteId) {
         return prontuarioRepository.findByPaciente_Id(pacienteId);
     }
@@ -62,6 +67,13 @@ public class ProntuarioService {
         }
 
         return prontuarioRepository.save(prontuario);
+    }
+
+    @Transactional
+    public void deletar(Long id) {
+        var prontuario = prontuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+        prontuarioRepository.delete(prontuario);
     }
 
 }

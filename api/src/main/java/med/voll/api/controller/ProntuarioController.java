@@ -30,6 +30,14 @@ public class ProntuarioController {
         return new DadosDetalhamentoProntuario(prontuario);
     }
 
+    @GetMapping
+    public List<DadosDetalhamentoProntuario> listarTodos() {
+        return prontuarioService.listar()
+                .stream()
+                .map(DadosDetalhamentoProntuario::new)
+                .toList();
+    }
+
     @GetMapping("/paciente/{id}")
     public List<DadosDetalhamentoProntuario> listarPorPaciente(@PathVariable Long id) {
         return prontuarioService.listarPorPaciente(id)
@@ -43,5 +51,12 @@ public class ProntuarioController {
                                                  @RequestBody DadosAtualizacaoProntuario dados) {
         var prontuario = prontuarioService.atualizar(id, dados);
         return new DadosDetalhamentoProntuario(prontuario);
+    }
+
+
+
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        prontuarioService.deletar(id);
     }
 }
