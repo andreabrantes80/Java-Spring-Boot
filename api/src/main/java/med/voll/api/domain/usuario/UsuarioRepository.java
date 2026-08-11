@@ -6,5 +6,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 //Classe reponsável consulta no BD
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    UserDetails findByLogin(String login);
+    Usuario findByLogin(String login);
 }
