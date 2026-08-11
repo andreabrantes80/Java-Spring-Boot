@@ -20,8 +20,8 @@ public class ResetTokenController {
 
     // Endpoint para gerar token (esqueci senha)
     @PostMapping("/forgot")
-    public ResponseEntity<String> forgot(@RequestParam String email) {
-        String token = resetTokenService.gerarToken(email);
+    public ResponseEntity<String> forgot(@RequestParam String login) {
+        String token = resetTokenService.gerarToken(login);
         // Aqui você pode enviar o token por email, mas por enquanto retorna direto
         return ResponseEntity.ok(token);
     }
