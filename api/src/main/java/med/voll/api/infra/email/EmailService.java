@@ -18,7 +18,7 @@ public class EmailService {
     public void enviarEmail(String destinatarioIgnorado, String assunto, String corpo) {
         // remetente e destinatário fixos vindos de variáveis de ambiente
         Email from = new Email(System.getenv("EMAIL_FROM"));
-        Email to = new Email(System.getenv("EMAIL_DESTINATARIO_FIXO"));
+        Email to = new Email(destinatarioIgnorado);
 
         Content content = new Content("text/html", corpo);
         Mail mail = new Mail(from, assunto, to, content);
