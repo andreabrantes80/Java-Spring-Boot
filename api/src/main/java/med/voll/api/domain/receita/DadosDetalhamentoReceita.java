@@ -1,11 +1,14 @@
 package med.voll.api.domain.receita;
 
+import java.time.LocalDate;
+
 public record DadosDetalhamentoReceita(
         Long id,
         Long prontuarioId,
         String medicamento,
         String dosagem,
-        String instrucoes
+        String instrucoes,
+        LocalDate data
 ) {
 
     public DadosDetalhamentoReceita(Receita receita) {
@@ -13,6 +16,7 @@ public record DadosDetalhamentoReceita(
                 receita.getProntuario().getId(),
                 receita.getMedicamento(),
                 receita.getDosagem(),
-                receita.getInstrucoes());
+                receita.getInstrucoes(),
+                receita.getData());
     }
 }

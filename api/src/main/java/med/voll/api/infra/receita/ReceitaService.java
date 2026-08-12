@@ -7,6 +7,7 @@ import med.voll.api.domain.receita.ReceitaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,7 +25,7 @@ public class ReceitaService {
     public Receita cadatrar(DadosCadastroReceita dados) {
         var prontuario = prontuarioRepository.findById(dados.prontuarioId()).orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
 
-        var receita = new Receita(null, dados.medicamento(), dados.dosagem(), dados.instrucoes(), prontuario);
+        var receita = new Receita(null, dados.medicamento(), dados.dosagem(), dados.instrucoes(), prontuario, LocalDate.now());
         return receitaRepository.save(receita);
     }
 

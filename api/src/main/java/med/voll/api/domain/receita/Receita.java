@@ -4,6 +4,8 @@ package med.voll.api.domain.receita;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "receitas")
 @Getter
@@ -24,5 +26,7 @@ public class Receita {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prontuario_id", nullable = false)
     private med.voll.api.domain.prontuario.Prontuario prontuario;
+
+    private LocalDate data;
 
 }
