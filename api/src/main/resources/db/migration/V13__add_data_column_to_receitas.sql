@@ -1,0 +1,7 @@
+ALTER TABLE receitas
+ADD COLUMN data DATE DEFAULT CURRENT_DATE;
+
+
+
+
+
