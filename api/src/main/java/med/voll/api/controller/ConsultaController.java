@@ -57,6 +57,23 @@ public class ConsultaController {
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));
     }
 
+    @PutMapping("/{id}/reagendar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoConsulta> reagendar(
+            @PathVariable Long id,
+            @RequestBody @Valid DadosReagendamentoConsulta dados) {
+
+        var consulta = consultaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+
+        consulta.setData(dados.novaData());
+        consulta.setMotivoReagendamento(dados.motivo()); // se quiser registrar motivo
+        consultaRepository.save(consulta);
+
+        return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));
+    }
+
+
     @GetMapping("/disponibilidade")
     public ResponseEntity<List<DadosDisponibilidadeConsulta>> disponibilidade(
             @RequestParam LocalDate data){

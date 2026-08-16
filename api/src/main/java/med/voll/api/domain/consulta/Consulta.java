@@ -1,10 +1,7 @@
 package med.voll.api.domain.consulta;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.paciente.Paciente;
 import org.hibernate.annotations.Fetch;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "consultas")
 @Entity(name = "Consulta")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -38,6 +36,10 @@ public class Consulta {
     @Enumerated(EnumType.STRING)
     private MotivoCancelamento motivoCancelamento;
 
+    private LocalDateTime dataReagendada;
+
+    private String motivoReagendamento;
+
     public Consulta(Medico medico,
                     Paciente paciente,
                     LocalDateTime data) {
@@ -53,5 +55,12 @@ public class Consulta {
         this.cancelada = true;
         this.motivoCancelamento = motivo;
 
+
+    }
+
+    public void reagendar(LocalDateTime novaData, String motivo) {
+        this.dataReagendada = novaData;
+        this.motivoReagendamento = motivo;
+        this.data = novaData; // atualiza a data principal
     }
 }
