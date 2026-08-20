@@ -24,15 +24,20 @@ public class Usuario implements UserDetails {
     private String login;
     private String senha;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
 
     public Usuario(DadosCadastroUsuario dados, String senhaCriptografada) {
         this.login = dados.login();
         this.senha = senhaCriptografada;
+        this.role = dados.role();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+ this.role.name()));
     }
 
     @Override

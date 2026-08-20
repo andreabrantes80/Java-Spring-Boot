@@ -26,6 +26,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("API Voll.med")
                     .withSubject(usuario.getLogin())
+                    .withClaim("role", usuario.getRole().name())
                     .withExpiresAt(dataExpiracao()) //seta um tempo de expiração do token
                     .sign(algoritmo);
         } catch (JWTCreationException exception) {
