@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -51,5 +48,24 @@ public class UsuarioController {
         repository.save(new Usuario(new DadosCadastroUsuario(dados.login(), dados.senha(), Role.ADMIN), senhaCriptografada));
         return ResponseEntity.ok("Administrador cadastrado com sucesso.");
     }
+
+    @PutMapping("/usuarios/{id}/senha")
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity alterarSenha(@PathVariable Long id, @RequestBody String novaSenha) {
+        var usuario = repository.findById(id).orElseThrow();
+        usuario.setSenha(encoder.encode(novaSenha));
+        return ResponseEntity.ok("Senha alterada com sucesso.");
+    }
+
+    @PutMapping("/usuarios/{id}/nome")
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity alterarNome(@PathVariable Long id, @RequestBody String novoNome) {
+        var usuario = repository.findById(id).orElseThrow();
+        usuario.setLogin(novoNome); // ou outro campo se tiver "nome" separado
+        return ResponseEntity.ok("Nome alterado com sucesso.");
+    }
+
 
 }
