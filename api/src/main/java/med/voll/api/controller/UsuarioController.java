@@ -34,7 +34,7 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuário cadastrado com sucesso.");
     }
 
-    @PostMapping("/usuarios/admin")
+    @PostMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity cadastrarAdmin(@RequestBody @Valid DadosCadastroUsuario dados) {
@@ -46,7 +46,7 @@ public class UsuarioController {
         return ResponseEntity.ok("Administrador cadastrado com sucesso.");
     }
 
-    @PutMapping("/usuarios/{id}/senha")
+    @PutMapping("/{id}/senha")
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity alterarSenha(@PathVariable Long id, @RequestBody DadosAlterarSenha dados) {
@@ -60,7 +60,7 @@ public class UsuarioController {
         return ResponseEntity.ok("Senha alterada com sucesso.");
     }
 
-    @PutMapping("/usuarios/{id}/nome")
+    @PutMapping("/{id}/nome")
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity alterarNome(@PathVariable Long id, @RequestBody String novoNome) {
