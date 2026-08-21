@@ -2,10 +2,7 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.domain.usuario.DadosCadastroUsuario;
-import med.voll.api.domain.usuario.Role;
-import med.voll.api.domain.usuario.Usuario;
-import med.voll.api.domain.usuario.UsuarioRepository;
+import med.voll.api.domain.usuario.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,9 +49,14 @@ public class UsuarioController {
     @PutMapping("/usuarios/{id}/senha")
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity alterarSenha(@PathVariable Long id, @RequestBody String novaSenha) {
+    public ResponseEntity alterarSenha(@PathVariable Long id, @RequestBody DadosAlterarSenha dados) {
         var usuario = repository.findById(id).orElseThrow();
-        usuario.setSenha(encoder.encode(novaSenha));
+        // opcional: validar senhaAtual
+        if (!encoder.matches(dados.senhaAtual(), usuario.getSenha())) {
+            return ResponseEntity.badRequest().body("Senha atual incorreta.");
+        }
+
+        usuario.setSenha(encoder.encode(dados.novaSenha()));
         return ResponseEntity.ok("Senha alterada com sucesso.");
     }
 
