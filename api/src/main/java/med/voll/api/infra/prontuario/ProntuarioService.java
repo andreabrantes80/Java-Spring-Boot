@@ -38,7 +38,7 @@ public class ProntuarioService {
                     .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
         }
 
-        var prontuario = new Prontuario(null, paciente, consulta, anotacoes, LocalDateTime.now());
+        var prontuario = new Prontuario(paciente, consulta, anotacoes);
         return prontuarioRepository.save(prontuario);
     }
 

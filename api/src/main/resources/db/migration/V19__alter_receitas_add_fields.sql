@@ -1,0 +1,14 @@
+ALTER TABLE receitas
+    ADD COLUMN IF NOT EXISTS frequencia VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS data_prescricao DATE NOT NULL DEFAULT CURRENT_DATE,
+    ADD COLUMN IF NOT EXISTS medico_id BIGINT;
+
+ALTER TABLE receitas
+    ADD CONSTRAINT IF NOT EXISTS fk_receita_medico FOREIGN KEY (medico_id) REFERENCES medicos(id);
+
+
+
+
+
+
+

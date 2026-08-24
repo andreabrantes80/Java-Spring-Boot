@@ -4,9 +4,13 @@ package med.voll.api.domain.prontuario;
 import jakarta.persistence.*;
 import lombok.*;
 import med.voll.api.domain.consulta.Consulta;
+import med.voll.api.domain.exame.Exame;
 import med.voll.api.domain.paciente.Paciente;
+import med.voll.api.domain.receita.Receita;
+import med.voll.api.domain.vacina.Vacina;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "Prontuario")
 @Table(name = "prontuarios")
@@ -31,4 +35,21 @@ public class Prontuario {
 
     private String anotacoes; // texto livre do médico
     private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    // Relações
+    @OneToMany(mappedBy = "prontuario", cascade = CascadeType.ALL)
+    private List<Exame> exames;
+
+    @OneToMany(mappedBy = "prontuario", cascade = CascadeType.ALL)
+    private List<Receita> receitas; // já existente
+
+    @OneToMany(mappedBy = "prontuario", cascade = CascadeType.ALL)
+    private List<Vacina> vacinas;
+
+    public Prontuario(Paciente paciente, Consulta consulta, String anotacoes) {
+        this.paciente = paciente;
+        this.consulta = consulta;
+        this.anotacoes = anotacoes;
+        this.dataCriacao = LocalDateTime.now();
+    }
 }
