@@ -1,6 +1,7 @@
 package med.voll.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import med.voll.api.domain.notafiscal.DadosNotaFiscal;
 import med.voll.api.domain.notafiscal.NotaFiscal;
 import med.voll.api.domain.notafiscal.NotaFiscalRepository;
 import org.springframework.http.ResponseEntity;
@@ -17,24 +18,27 @@ public class NotaFiscalController {
 
     // Emitir nota fiscal
     @PostMapping
-    public ResponseEntity<NotaFiscal> emitir(@RequestBody NotaFiscal notaFiscal) {
+    public ResponseEntity<DadosNotaFiscal> emitir(@RequestBody NotaFiscal notaFiscal) {
         notaFiscal.setDataEmissao(java.time.LocalDateTime.now());
         NotaFiscal salva = repository.save(notaFiscal);
-        return ResponseEntity.ok(salva);
+        return ResponseEntity.ok(new DadosNotaFiscal(salva));
     }
 
     // Consultar nota por ID
     @GetMapping("/{id}")
-    public ResponseEntity<NotaFiscal> consultar(@PathVariable Long id) {
+    public ResponseEntity<DadosNotaFiscal> consultar(@PathVariable Long id) {
         return repository.findById(id)
-                .map(ResponseEntity::ok)
+                .map(nf -> ResponseEntity.ok(new DadosNotaFiscal(nf)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // Listar notas de um prontuário
     @GetMapping("/prontuario/{prontuarioId}")
-    public ResponseEntity<List<NotaFiscal>> listarPorProntuario(@PathVariable Long prontuarioId) {
-        List<NotaFiscal> notas = repository.findByProntuarioId(prontuarioId);
+    public ResponseEntity<List<DadosNotaFiscal>> listarPorProntuario(@PathVariable Long prontuarioId) {
+        List<DadosNotaFiscal> notas = repository.findByProntuarioId(prontuarioId)
+                .stream()
+                .map(DadosNotaFiscal::new)
+                .toList();
         return ResponseEntity.ok(notas);
     }
 }
