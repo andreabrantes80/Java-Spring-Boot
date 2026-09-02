@@ -50,6 +50,9 @@ public class Paciente {
         if (dados.telefone() != null)
             this.telefone = dados.telefone();
 
+        if(dados.cpf() != null)
+            this.cpf = dados.cpf();
+
         if (dados.endereco() != null)
             endereco.atualizarInformacoes(dados.endereco());
     }

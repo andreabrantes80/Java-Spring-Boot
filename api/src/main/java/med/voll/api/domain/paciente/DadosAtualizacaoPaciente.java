@@ -7,6 +7,7 @@ public record DadosAtualizacaoPaciente(
         Long id,
         String nome,
         String telefone,
+        String cpf,
         @Valid DadosEndereco endereco
 ) {
 }
