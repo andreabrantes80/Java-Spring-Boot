@@ -5,15 +5,17 @@ import com.itextpdf.text.pdf.PdfWriter;
 import med.voll.api.domain.receita.Receita;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class PdfGenerator {
 
     public static byte[] gerar(Receita receita, String nomePaciente, String emailPaciente, String telefonePaciente,
-                                      String nomeMedico, String nomeClinica, String enderecoClinica, String telefoneClinica, String logoPath) {
+                               String nomeMedico, String nomeClinica, String enderecoClinica, String telefoneClinica, String logoPath) {
         try {
             Document document = new Document();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PdfWriter writer =  PdfWriter.getInstance(document, out);
+            PdfWriter writer = PdfWriter.getInstance(document, out);
             // adiciona o evento de rodapé
             writer.setPageEvent(new FooterEvent(nomeClinica + " - " + enderecoClinica + " | Tel: " + telefoneClinica));
             document.open();
@@ -42,12 +44,24 @@ public class PdfGenerator {
             document.add(new Paragraph("Medicamento: " + receita.getMedicamento()));
             document.add(new Paragraph("Dosagem: " + receita.getDosagem()));
             document.add(new Paragraph("Instruções: " + receita.getInstrucoes()));
-            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n\n"));
 
-            // Médico + linha para assinatura
-            document.add(new Paragraph("Médico: " + nomeMedico));
-            document.add(new Paragraph("________________________________________"));
-            document.add(new Paragraph("Assinatura\n\n"));
+            // Assinatura centralizada
+            Paragraph assinatura = new Paragraph("________________________________________");
+            assinatura.setAlignment(Element.ALIGN_CENTER);
+            document.add(assinatura);
+
+            Paragraph medico = new Paragraph("Médico: " + nomeMedico);
+            medico.setAlignment(Element.ALIGN_CENTER);
+            document.add(medico);
+
+            // Data da impressão
+            String dataImpressao = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            Paragraph data = new Paragraph("Data da impressão: " + dataImpressao);
+            data.setAlignment(Element.ALIGN_CENTER);
+            document.add(data);
+
+            document.add(new Paragraph("\n\n"));
 
             // Rodapé
 //            Paragraph footer = new Paragraph(nomeClinica + " - " + enderecoClinica + " | Tel: " + telefoneClinica);
