@@ -21,12 +21,13 @@ public class PdfGenerator {
             document.open();
 
             // Logo da clínica
-//            if (logoPath != null) {
-//                Image logo = Image.getInstance(logoPath);
-//                logo.scaleToFit(100, 100);
-//                logo.setAlignment(Element.ALIGN_CENTER);
-//                document.add(logo);
-//            }
+            if (logoPath != null) {
+                Image logo = Image.getInstance(PdfGenerator.class.getResource("/static/logo.png"));
+                logo.scaleToFit(100, 100);
+                logo.setAlignment(Element.ALIGN_CENTER);
+                document.add(logo);
+                document.add(new Paragraph("\n")); // espaço após a logo
+            }
 
             // Cabeçalho
             Paragraph header = new Paragraph(nomeClinica + "\nTelefone: " + telefoneClinica + " | Email: contato@" + nomeClinica.toLowerCase() + ".com");
