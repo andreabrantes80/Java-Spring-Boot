@@ -57,7 +57,7 @@ public class PdfGenerator {
 
             // Data da impressão
             String dataImpressao = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            Paragraph data = new Paragraph("Data da impressão: " + dataImpressao);
+            Paragraph data = new Paragraph("Data: " + dataImpressao);
             data.setAlignment(Element.ALIGN_CENTER);
             document.add(data);
 

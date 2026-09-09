@@ -1,5 +1,7 @@
 package med.voll.api.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import med.voll.api.domain.receita.DadosCadastroReceita;
 import med.voll.api.domain.receita.DadosDetalhamentoReceita;
 import med.voll.api.infra.receita.PdfGenerator;
@@ -14,6 +16,8 @@ import java.util.List;
 public class ReceitaController {
 
     private final ReceitaService receitaService;
+
+    private static final Logger log = LoggerFactory.getLogger(ReceitaController.class);
 
     public ReceitaController(ReceitaService receitaService) {
         this.receitaService = receitaService;
@@ -46,12 +50,15 @@ public class ReceitaController {
                 ? receita.getProntuario().getConsulta().getMedico().getNome()
                 : "________________________"; // espaço para assinatura
 
+        System.out.println("#######"+nomeMedico);
+        log.info("Nome do médico: {}", nomeMedico);
 
         // Clínica
         String nomeClinica = "Clínica VollMed";
         String enderecoClinica = "Av. Principal, 123 - Brasília/DF";
         String telefoneClinica = "(61) 99999-9999";
         String logoPath = "src/main/resources/static/logo.png";
+
 
         byte[] pdf = PdfGenerator.gerar(receita, nomePaciente, emailPaciente, telefonePaciente, nomeMedico, nomeClinica, enderecoClinica, telefoneClinica, logoPath);
 
