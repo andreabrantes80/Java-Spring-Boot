@@ -47,9 +47,12 @@ public class ReceitaController {
         String telefonePaciente = paciente != null ? paciente.getTelefone() : "Não informado";
 
         // Médico
-        String nomeMedico = receita.getProntuario().getConsulta() != null
+        String nomeMedico = (receita.getProntuario().getConsulta() != null
+                && receita.getProntuario().getConsulta().getMedico() != null
+                && receita.getProntuario().getConsulta().getMedico().getNome() != null)
                 ? receita.getProntuario().getConsulta().getMedico().getNome()
-                : "________________________"; // espaço para assinatura
+                : "________________________";
+
 
         log.info("Receita ID: {}", id);
         log.info("Paciente: {}", nomePaciente);

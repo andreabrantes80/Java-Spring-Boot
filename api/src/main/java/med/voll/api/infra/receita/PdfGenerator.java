@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import med.voll.api.domain.receita.Receita;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -21,13 +22,17 @@ public class PdfGenerator {
             document.open();
 
             // Logo da clínica
-            if (logoPath != null) {
-                Image logo = Image.getInstance(PdfGenerator.class.getResource("/static/logo.png"));
+            URL logoUrl = PdfGenerator.class.getResource("/static/logo.png");
+            if (logoUrl != null) {
+                Image logo = Image.getInstance(logoUrl);
                 logo.scaleToFit(100, 100);
                 logo.setAlignment(Element.ALIGN_CENTER);
                 document.add(logo);
-                document.add(new Paragraph("\n")); // espaço após a logo
+                document.add(new Paragraph("\n"));
+            } else {
+                System.out.println("Logo não encontrada em: " + logoPath);
             }
+
 
             // Cabeçalho
             Paragraph header = new Paragraph(nomeClinica + "\nTelefone: " + telefoneClinica + " | Email: contato@" + nomeClinica.toLowerCase() + ".com");
