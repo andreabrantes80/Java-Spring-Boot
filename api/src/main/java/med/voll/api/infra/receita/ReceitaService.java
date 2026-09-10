@@ -41,7 +41,7 @@ public class ReceitaService {
     }
 
     public Receita buscarPorId(Long id) {
-        return receitaRepository.buscarPorIdComMedico(id).orElseThrow(() -> new RuntimeException("Receita não encontrada"));
+        return receitaRepository.findById(id).orElseThrow(() -> new RuntimeException("Receita não encontrada"));
     }
 
     @Transactional

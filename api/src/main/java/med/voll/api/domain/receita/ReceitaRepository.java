@@ -14,8 +14,8 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
 
     @Query("SELECT r FROM Receita r " +
             "JOIN FETCH r.prontuario p " +
-            "JOIN FETCH p.consulta c " +
-            "JOIN FETCH c.medico " +
+            "LEFT JOIN FETCH p.consulta c " +
+            "LEFT JOIN FETCH c.medico " +
             "WHERE r.id = :id")
     Optional <Receita> buscarPorIdComMedico(@Param("id") Long id);
 
