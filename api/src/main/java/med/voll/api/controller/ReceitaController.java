@@ -6,6 +6,7 @@ import med.voll.api.domain.receita.DadosCadastroReceita;
 import med.voll.api.domain.receita.DadosDetalhamentoReceita;
 import med.voll.api.infra.receita.PdfGenerator;
 import med.voll.api.infra.receita.ReceitaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,8 +51,11 @@ public class ReceitaController {
                 ? receita.getProntuario().getConsulta().getMedico().getNome()
                 : "________________________"; // espaço para assinatura
 
-        System.out.println("#######"+nomeMedico);
-        log.info("Nome do médico: {}", nomeMedico);
+        log.info("Receita ID: {}", id);
+        log.info("Paciente: {}", nomePaciente);
+        log.info("Médico: {}", nomeMedico);
+        log.info("Medicamento: {}", receita.getMedicamento());
+
 
         // Clínica
         String nomeClinica = "Clínica VollMed";
@@ -59,13 +63,21 @@ public class ReceitaController {
         String telefoneClinica = "(61) 99999-9999";
         String logoPath = "src/main/resources/static/logo.png";
 
+        try{
+            byte[] pdf = PdfGenerator.gerar(receita, nomePaciente, emailPaciente, telefonePaciente, nomeMedico, nomeClinica, enderecoClinica, telefoneClinica, logoPath);
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/pdf")
+                    .header("Content-Disposition", "inline; filename=receita.pdf")
+                    .body(pdf);
 
-        byte[] pdf = PdfGenerator.gerar(receita, nomePaciente, emailPaciente, telefonePaciente, nomeMedico, nomeClinica, enderecoClinica, telefoneClinica, logoPath);
+        } catch (Exception e) {
+            log.error("Erro ao gerar PDF da receita {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(("Erro ao gerar PDF: " + e.getMessage()).getBytes());
+        }
 
-        return ResponseEntity.ok()
-                .header("Content-Type", "application/pdf")
-                .header("Content-Disposition", "inline; filename=receita.pdf")
-                .body(pdf);
+
+
     }
 
     @PutMapping("/{id}")
