@@ -1,5 +1,6 @@
 package med.voll.api.infra.receita;
 
+import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.prontuario.ProntuarioRepository;
 import med.voll.api.domain.receita.DadosCadastroReceita;
 import med.voll.api.domain.receita.Receita;
@@ -16,8 +17,11 @@ public class ReceitaService {
     private final ReceitaRepository receitaRepository;
     private final ProntuarioRepository prontuarioRepository;
 
-    public ReceitaService(ReceitaRepository receitaRepository, ProntuarioRepository prontuarioRepository) {
+    private final MedicoRepository medicoRepository;
+
+    public ReceitaService(ReceitaRepository receitaRepository, ProntuarioRepository prontuarioRepository, MedicoRepository medicoRepository) {
         this.receitaRepository = receitaRepository;
+        this.medicoRepository = medicoRepository;
         this.prontuarioRepository = prontuarioRepository;
     }
 
@@ -25,7 +29,10 @@ public class ReceitaService {
     public Receita cadatrar(DadosCadastroReceita dados) {
         var prontuario = prontuarioRepository.findById(dados.prontuarioId()).orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
 
-        var receita = new Receita(null, dados.medicamento(), dados.dosagem(), dados.instrucoes(), prontuario, LocalDate.now());
+        var medico = medicoRepository.findById(dados.medicoId())
+                .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
+
+        var receita = new Receita(null, dados.medicamento(), dados.dosagem(), dados.instrucoes(), dados.frequencia(), LocalDate.now(), prontuario,medico,  LocalDate.now());
         return receitaRepository.save(receita);
     }
 
