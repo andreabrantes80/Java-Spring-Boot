@@ -22,7 +22,7 @@ public class PdfGenerator {
             document.open();
 
             // Logo da clínica
-            URL logoUrl = PdfGenerator.class.getResource("/static/logo.png");
+            URL logoUrl = PdfGenerator.class.getResource("/static/logo-clinica.png");
             if (logoUrl != null) {
                 Image logo = Image.getInstance(logoUrl);
                 logo.scaleToFit(100, 100);
