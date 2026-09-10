@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ReceitaRepository extends JpaRepository<Receita, Long> {
@@ -16,7 +17,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
             "JOIN FETCH p.consulta c " +
             "JOIN FETCH c.medico " +
             "WHERE r.id = :id")
-    Receita buscarPorIdComMedico(@Param("id") Long id);
+    Optional <Receita> buscarPorIdComMedico(@Param("id") Long id);
 
 }
 
