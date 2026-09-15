@@ -34,9 +34,12 @@ public class PdfGenerator {
             }
 
 
-            // Cabeçalho
-            Paragraph header = new Paragraph(nomeClinica + "\nTelefone: " + telefoneClinica + " | Email: contato@" + nomeClinica.toLowerCase() + ".com");
+            // Cabeçalho apenas com "Receita Médica" e margem no nome da clínica
+            Paragraph header = new Paragraph("Receita Médica");
             header.setAlignment(Element.ALIGN_CENTER);
+
+            // aplica margem apenas ao nome da clínica
+            header.setIndentationLeft(16f);
             document.add(header);
             document.add(new Paragraph("\n"));
 
