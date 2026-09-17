@@ -36,7 +36,9 @@ public class SecurityConfigurations {
                         .requestMatchers("/usuarios").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/senhas-websocket/**").permitAll()
                         .anyRequest().authenticated()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .build();
     }
 
